@@ -15,12 +15,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto user) {
         UserEntity userEntity = new UserEntity();
+
         BeanUtils.copyProperties(user, userEntity);
         userEntity.setEncryptedPassword("Test password");
         userEntity.setUserId("user test id");
         UserEntity createdUserEntity = userRepository.save(userEntity);
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(createdUserEntity, userDto);
+
         return userDto;
     }
 }

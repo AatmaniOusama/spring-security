@@ -35,7 +35,7 @@ public class UserController {
 
 
 		UserDto createdUserDto = userService.createUser(userDto);
-
+		System.out.println(createdUserDto.getUserId());
 		UserResponse userResponse = new UserResponse();
 		BeanUtils.copyProperties(createdUserDto, userResponse);
 
