@@ -15,13 +15,13 @@ public class UserEntity implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
-	@Column(nullable = true)
+	@Column(nullable = true, length = 50)
 	private String userId;
 	@Column(nullable = false, length = 50)
 	private String firstName;
 	@Column(nullable = false, length = 50)
 	private String lastName;
-	@Column(nullable = false, length = 120)
+	@Column(nullable = false, length = 120, unique = true)
 	private String email;
 	@Column(nullable = true)
 	private String encryptedPassword;
