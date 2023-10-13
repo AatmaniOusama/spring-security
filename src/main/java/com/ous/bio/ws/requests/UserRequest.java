@@ -40,13 +40,4 @@ public class UserRequest {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserRequest{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

@@ -1,11 +1,11 @@
 package com.ous.bio.ws.shared.dto;
 
-import java.io.Serial;
+//import java.io.Serial;
 import java.io.Serializable;
 
 public class UserDto implements Serializable {
 
-    @Serial
+
     private static final long serialVersionUID = -376334872574695989L;
 	private long id;
     private String userId;
@@ -69,7 +69,7 @@ public class UserDto implements Serializable {
     }
 
     public String getEncryptedPassword() {
-        return encryptedPassword;
+        return this.encryptedPassword;
     }
 
     public void setEncryptedPassword(String encryptedPassword) {

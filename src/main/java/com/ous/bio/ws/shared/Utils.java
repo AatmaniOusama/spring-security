@@ -1,9 +1,9 @@
 package com.ous.bio.ws.shared;
 
-import org.springframework.stereotype.Component;
-
 import java.security.SecureRandom;
 import java.util.Random;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class Utils {
