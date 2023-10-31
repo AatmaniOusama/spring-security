@@ -1,4 +1,4 @@
-package com.ous.bio.ws.reponses;
+package com.ous.bio.ws.responses;
 
 public enum ErrorMessages {
 

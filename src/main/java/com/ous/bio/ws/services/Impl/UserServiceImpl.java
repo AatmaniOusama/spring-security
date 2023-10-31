@@ -1,8 +1,14 @@
 package com.ous.bio.ws.services.Impl;
 
 import com.ous.bio.ws.requests.UserRequest;
+import com.ous.bio.ws.shared.dto.AddressDto;
+import com.ous.bio.ws.shared.dto.ContactDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +22,8 @@ import com.ous.bio.ws.shared.Utils;
 import com.ous.bio.ws.shared.dto.UserDto;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,13 +36,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto user) {
 
-       UserEntity checkUser = userRepository.findByEmail(user.getEmail());
+        ModelMapper modelMapper = new ModelMapper();
 
-       if(checkUser != null) throw new RuntimeException("User already exist");
+        UserEntity checkUser = userRepository.findByEmail(user.getEmail());
 
-        UserEntity userEntity = new UserEntity();
+        if(checkUser != null) throw new RuntimeException("User already exist");
 
-        BeanUtils.copyProperties(user, userEntity);
+        IntStream.range(0, user.getAddresses().size())
+                        .forEach(index -> {
+                            AddressDto address = user.getAddresses().get(index);
+                            address.setUser(user);
+                            address.setAddressId(utils.generateStringId(30));
+                            user.getAddresses().set(index, address);
+                        });
+
+        user.getContact().setContactId(utils.generateStringId(30));
+        user.getContact().setUser(user);
+
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
@@ -42,11 +61,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity createdUserEntity = userRepository.save(userEntity);
 
-        UserDto userDto = new UserDto();
-
-        BeanUtils.copyProperties(createdUserEntity, userDto);
-
-        return userDto;
+        return modelMapper.map(createdUserEntity, UserDto.class);
     }
 
     @Override
@@ -104,6 +119,33 @@ public class UserServiceImpl implements UserService {
         if(userEntity == null) throw new UsernameNotFoundException(userId);
 
         userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit, String search, int status) {
+
+        if(page > 0) page -= 1;
+
+        List<UserDto> usersDto = new ArrayList<>();
+
+        Pageable pageRequest = PageRequest.of(page, limit);
+        Page<UserEntity> usersPage;
+
+        if(search.isEmpty()){
+            usersPage = userRepository.findAllUsers(pageRequest);
+        }else{
+            usersPage = userRepository.findAllUsersByCriteria(pageRequest, search, status);
+        }
+
+        List<UserEntity> users = usersPage.getContent();
+
+        users.forEach(userEntity -> {
+            ModelMapper modelMapper = new ModelMapper();
+            UserDto user = modelMapper.map(userEntity, UserDto.class);
+            usersDto.add(user);
+        });
+
+        return usersDto;
     }
 
 

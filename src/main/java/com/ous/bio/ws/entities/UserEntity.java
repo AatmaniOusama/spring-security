@@ -3,11 +3,11 @@ package com.ous.bio.ws.entities;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "users")
 public class UserEntity implements Serializable {
@@ -29,8 +29,14 @@ public class UserEntity implements Serializable {
 	private String encryptedPassword;
 	@Column(nullable = true)
 	private String emailVerificationToken;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Boolean emailVerificationStatus = false;
+	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<AddressEntity> addresses;
+	@OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	private ContactEntity contact;
+	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<GroupEntity> groups = new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -91,5 +97,29 @@ public class UserEntity implements Serializable {
 
 	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
 		this.emailVerificationStatus = emailVerificationStatus;
+	}
+
+	public List<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
+
+	public ContactEntity getContact() {
+		return contact;
+	}
+
+	public void setContact(ContactEntity contact) {
+		this.contact = contact;
+	}
+
+	public Set<GroupEntity> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Set<GroupEntity> groups) {
+		this.groups = groups;
 	}
 }

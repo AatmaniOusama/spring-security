@@ -1,4 +1,6 @@
-import static org.junit.jupiter.api.Assertions.*;
+package com.ous.bio.ws.exceptions;
+
+
 class UserExceptionTest {
-  
+
 }

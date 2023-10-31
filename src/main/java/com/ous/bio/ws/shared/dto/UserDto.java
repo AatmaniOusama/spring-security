@@ -2,6 +2,7 @@ package com.ous.bio.ws.shared.dto;
 
 //import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class UserDto implements Serializable {
 
@@ -9,7 +10,6 @@ public class UserDto implements Serializable {
     private static final long serialVersionUID = -376334872574695989L;
 	private long id;
     private String userId;
-
     private String firstName;
     private String lastName;
     private String email;
@@ -17,6 +17,16 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    private List<AddressDto> addresses;
+    private ContactDto contact;
+
+    public ContactDto getContact() {
+        return contact;
+    }
+
+    public void setContact(ContactDto contact) {
+        this.contact = contact;
+    }
 
     public String getUserId() {
         return userId;
@@ -90,5 +100,12 @@ public class UserDto implements Serializable {
 
     public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
         this.emailVerificationStatus = emailVerificationStatus;
+    }
+    public List<AddressDto> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressDto> addresses) {
+        this.addresses = addresses;
     }
 }

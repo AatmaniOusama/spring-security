@@ -1,8 +1,6 @@
 package com.ous.bio.ws.responses;
 
-import com.ous.bio.ws.shared.dto.UserDto;
-
-public class AddresseResponse {
+public class AddressResponse {
 
     private String addressId;
     private String city;

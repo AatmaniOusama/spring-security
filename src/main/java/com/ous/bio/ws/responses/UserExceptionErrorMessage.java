@@ -2,12 +2,12 @@ package com.ous.bio.ws.responses;
 
 import java.util.Date;
 
-public class ErrorMessage {
+public class UserExceptionErrorMessage {
 
     private Date timestamp;
     private String messgae;
 
-    public ErrorMessage(Date timestamp, String messgae) {
+    public UserExceptionErrorMessage(Date timestamp, String messgae) {
         this.timestamp = timestamp;
         this.messgae = messgae;
     }
