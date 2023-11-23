@@ -50,20 +50,31 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse res,
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
+        try {
+            String userName = ((User) auth.getPrincipal()).getUsername();
 
-        String userName = ((User) auth.getPrincipal()).getUsername();
+            UserService userService = (UserService)SpringApplicationContext.getBean("userSeviceImpl");
 
-        String token = Jwts.builder()
-                .setSubject(userName)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 864000000))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET.getBytes())
-                .compact();
-        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+            UserDto userDto = userService.getUser(userName);
 
-        UserDto userDto = userService.getUser(userName);
+            String token = Jwts.builder()
+                    .setSubject(userName)
+                    .claim("id", userDto.getUserId())
+                    .claim("name", userDto.getFirstName() + " " + userDto.getLastName())
+                    .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                    .signWith(SignatureAlgorithm.HS256, SecurityConstants.TOKEN_SECRET )
+                    .compact();
 
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        res.addHeader("user_id", userDto.getUserId());
-    }
+
+
+            res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+            res.addHeader("user_id", userDto.getUserId());
+
+            res.getWriter().write("{\"token\": \"" + token + "\", \"id\": \""+ userDto.getUserId() + "\"}");
+
+        } catch (Exception e) {
+            // Log the exception or handle it accordingly
+            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error generating JWT: " + e.getMessage());
+        }
+}
 }

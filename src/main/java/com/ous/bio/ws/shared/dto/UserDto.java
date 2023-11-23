@@ -14,11 +14,20 @@ public class UserDto implements Serializable {
     private String lastName;
     private String email;
     private String password;
+    private Boolean admin;
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
     private List<AddressDto> addresses;
     private ContactDto contact;
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
 
     public ContactDto getContact() {
         return contact;

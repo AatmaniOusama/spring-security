@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class AddressEntity implements Serializable {
 
     public static final long serialVersionID = 810862555182863526L;
-
     @Id
     @GeneratedValue
     private long id;

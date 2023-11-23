@@ -8,8 +8,17 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private Boolean admin;
     private List<AddressResponse> addresses;
     private ContactResponse contact;
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
 
     public ContactResponse getContact() {
         return contact;

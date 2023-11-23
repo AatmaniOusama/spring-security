@@ -26,6 +26,8 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false, length = 120, unique = true)
 	private String email;
 	@Column(nullable = true)
+	private Boolean admin = false;
+	@Column(nullable = true)
 	private String encryptedPassword;
 	@Column(nullable = true)
 	private String emailVerificationToken;
@@ -121,5 +123,13 @@ public class UserEntity implements Serializable {
 
 	public void setGroups(Set<GroupEntity> groups) {
 		this.groups = groups;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
 	}
 }

@@ -1,6 +1,7 @@
 package com.ous.bio.ws.security;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,24 +38,25 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(SecurityConstants.HEADER_STRING);
-
+        String user="";
         if (token != null) {
-
+            System.out.println("toke before=> "+token);
             token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
-
-            String user = Jwts.parser()
-                    .setSigningKey( SecurityConstants.TOKEN_SECRET.getBytes() )
-                    .parseClaimsJws( token )
-                    .getBody()
-                    .getSubject();
-
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+            System.out.println("toke after=> "+token);
+            try{
+                     user = Jwts.parser()
+                            .setSigningKey(SecurityConstants.TOKEN_SECRET)
+                            .parseClaimsJws(token)
+                            .getBody()
+                            .getSubject();
+                if (user != null) {
+                    return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                }
+            } catch(MalformedJwtException ex){
+                ex.printStackTrace();
             }
-
             return null;
         }
-
         return null;
     }
 }

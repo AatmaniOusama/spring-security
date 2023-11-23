@@ -20,12 +20,20 @@ public class UserRequest {
     @Size(min = 8, max = 16, message = "The password must be between 8 and 1§ Chars !!")
     //@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$")
     private String password;
-
+    private Boolean admin;
     private List<AddressRequest> addresses = new ArrayList<>();
     private ContactRequest contact;
 
     public ContactRequest getContact() {
         return contact;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 
     public void setContact(ContactRequest contact) {

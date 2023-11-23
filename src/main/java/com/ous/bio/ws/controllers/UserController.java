@@ -70,21 +70,6 @@ public class UserController {
 
 		return usersResponse;
 	}
-
-	/*@PostMapping
-	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) throws Exception {
-
-		if(userRequest.getFirstName().isEmpty()) throw new UserException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
-
-		ModelMapper modelMapper = new ModelMapper();
-		UserDto userDto = modelMapper.map(userRequest, UserDto.class);
-
-		UserDto createdUserDto = userService.createUser(userDto);
-		UserResponse userResponse = new UserResponse();
-		BeanUtils.copyProperties(createdUserDto, userResponse);
-
-		return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
-	}*/
 	@PostMapping(
 			consumes={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
 			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
@@ -100,8 +85,6 @@ public class UserController {
 		UserDto createUser = userService.createUser(userDto);
 
 		UserResponse userResponse =  modelMapper.map(createUser, UserResponse.class);
-
-
 
 		return new ResponseEntity<UserResponse>(userResponse, HttpStatus.CREATED);
 

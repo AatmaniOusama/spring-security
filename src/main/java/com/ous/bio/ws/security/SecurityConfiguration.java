@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
+@Order(1)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -27,7 +29,7 @@ public class SecurityConfiguration {
     }
 
 
-    @Order(1)
+    //@Order(1)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -36,6 +38,12 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+                .permitAll()
+                .antMatchers( "/v2/api-docs",
+                              "/swagger-resources/**",
+                              "/swagger-ui.html**",
+                              "/webjars/**"
+                )
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
